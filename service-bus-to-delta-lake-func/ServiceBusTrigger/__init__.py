@@ -20,6 +20,7 @@ with open('/root/.databricks-connect', 'w') as configFile:
 # Creating spark session
 spark = SparkSession.builder.getOrCreate()
 
+# Handles _batches_ of messages. Expects each message in a batch to be a string JSON, e.g. '{"my-field1": "myvalue1", "my-field2": 12345}'
 def main(msgBatch: List[func.ServiceBusMessage]):
 
     # Converting messages from JSON to dataframe
