@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -z "${$INPUT_QUEUE_NAME}" ];
+if [ -z "${INPUT_QUEUE_NAME}" ];
 then
 	cp -rf /home/site/wwwroot/ServiceBusTrigger/function-for-topic.json /home/site/wwwroot/ServiceBusTrigger/function.json
 else
