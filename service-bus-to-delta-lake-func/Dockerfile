@@ -12,3 +12,8 @@ COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
 COPY . /home/site/wwwroot
+
+# Need to override the startup script, to copy the correct function.json based on whether a queue or a topic is chosen as input
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
+CMD [ "/startup.sh" ]
