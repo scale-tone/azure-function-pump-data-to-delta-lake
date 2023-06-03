@@ -5,6 +5,7 @@
       "name": "msgBatch",
       "type": "serviceBusTrigger",
       "direction": "in",
+      "dataType": "string",
       "cardinality": "many",
       "queueName": "%INPUT_QUEUE_NAME%",
       "connection": "SERVICEBUS_CONN_STRING"

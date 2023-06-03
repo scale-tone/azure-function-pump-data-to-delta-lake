@@ -4,3 +4,5 @@
 
 azure-functions
 databricks-connect==11.3.0b0
+jsonpath_ng
+xmltodict
