@@ -5,7 +5,11 @@ An Azure Function to pump events from an Azure Service Bus queue/topic into a [D
 Uses [Databricks Connect client library](https://docs.databricks.com/dev-tools/databricks-connect.html#step-1-install-the-client) to connect to your cluster, therefore is written in Python. Needs to be containerized, to maintain the correct list of dependencies.
 WARNING: may not work locally on your devbox (especially on Windows).
 
-The function expects each message to be a JSON representation of a record to be appended, e.g. `{"my-field1":"my-value", "my-field2": 12345}`. Field names and types must match the schema of your table. Table must pre-exist.
+The function expects each message to be either a JSON or XML representation of a record to be appended.
+JSON example: `{"my-field1":"my-value", "my-field2": 12345}`. 
+XML example: `<my-message my-field1="my-value"><my-field2>12345</my-field2></my-message>`
+
+Resulting field names and types must match the schema of your table. Table must pre-exist.
 
 # Config Settings
 
@@ -20,6 +24,8 @@ The following settings need to be configured in your Function App instance.
   
 * `INPUT_TOPIC_NAME`, `INPUT_SUBSCRIPTION_NAME` - names of your topic and subscription. Specify either queue name or topic/subscription names, not both.
 * `OUTPUT_TABLE_NAME` - name of your Delta Lake table, e.g. `default.my-table`.
+
+* (optional) `JSONPATH_QUERY` - a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) expression to be applied to each message. Use it if your messages (either JSON or XML) do not match your table's schema.
 
 # How to deploy to Azure
 
