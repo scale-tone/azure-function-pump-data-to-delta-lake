@@ -5,6 +5,7 @@
       "name": "msgBatch",
       "type": "serviceBusTrigger",
       "direction": "in",
+      "dataType": "string",
       "cardinality": "many",
       "topicName": "%INPUT_TOPIC_NAME%",
       "subscriptionName": "%INPUT_SUBSCRIPTION_NAME%",
