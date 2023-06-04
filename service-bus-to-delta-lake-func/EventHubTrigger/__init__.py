@@ -3,8 +3,8 @@ import azure.functions as func
 from helpers import convert_and_add_message, send_to_delta_table
 
 # Handles _batches_ of Service Bus messages. Expects each message in a batch to be a string (with either JSON or XML)
-def main(events: List[func.ServiceBusMessage]):
-
+def main(events: List[func.EventHubEvent]):
+     
     result = []
 
     for event in events:

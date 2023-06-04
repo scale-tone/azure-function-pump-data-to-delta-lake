@@ -1,5 +1,6 @@
 import os
 import json
+import xmltodict
 
 from delta.tables import *
 from pyspark.sql import SparkSession
@@ -42,3 +43,28 @@ def apply_jsonpath(msg, json_path):
             record[res.path.fields[0]] = res.value
 
         return record
+
+
+# Will apply this jsonpath query, if specified
+jsonPathQuery = os.getenv("JSONPATH_QUERY")
+
+def convert_and_add_message(msgString, convertedMsgBatch):
+
+    # supporting both XML and JSON
+    if msgString.startswith("<"):
+        jsonObjects = xmltodict.parse(msgString, attr_prefix="")
+        jsonObjects = list(jsonObjects.values())[0]
+    else:
+        jsonObjects = json.loads(msgString)
+
+    # converting to array, if it is not yet
+    if type(jsonObjects) != list:
+        jsonObjects = [jsonObjects]
+
+    for jsonObject in jsonObjects:
+
+        # Applying jsonpath query, if specified
+        if jsonPathQuery != None:
+            jsonObject = apply_jsonpath(jsonObject, jsonPathQuery)
+
+        convertedMsgBatch.append(jsonObject)

@@ -2,13 +2,14 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
+      "type": "eventHubTrigger",
       "name": "events",
-      "type": "serviceBusTrigger",
       "direction": "in",
       "dataType": "string",
+      "eventHubName": "%INPUT_EVENTHUB_NAME%",
+      "connection": "EVENTHUB_CONN_STRING",
       "cardinality": "many",
-      "queueName": "%INPUT_QUEUE_NAME%",
-      "connection": "SERVICEBUS_CONN_STRING"
+      "consumerGroup": "$Default"
     }
   ]
 }

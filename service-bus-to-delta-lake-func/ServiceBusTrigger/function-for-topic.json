@@ -2,7 +2,7 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "msgBatch",
+      "name": "events",
       "type": "serviceBusTrigger",
       "direction": "in",
       "dataType": "string",
