@@ -7,7 +7,7 @@
       "direction": "in",
       "dataType": "string",
       "cardinality": "many",
-      "queueName": "STORAGE_QUEUE_NAME",
+      "queueName": "%STORAGE_QUEUE_NAME%",
       "connection": "STORAGE_CONN_STRING"
     }
   ]
