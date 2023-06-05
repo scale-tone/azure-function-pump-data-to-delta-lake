@@ -18,11 +18,11 @@ The following settings need to be configured in your Function App instance.
 * `DATABRICKS_ADDRESS`, `DATABRICKS_API_TOKEN`, `DATABRICKS_CLUSTER_ID`, `DATABRICKS_ORG_ID` - connection parameters to communicate with your Azure Databricks cluster. [See here on how and where to get them](https://docs.databricks.com/dev-tools/databricks-connect.html#step-2-configure-connection-properties).
 
 * `SERVICEBUS_CONN_STRING` - connection string to your Azure Service Bus namespace.
-* `INPUT_QUEUE_NAME` - name of your input queue
+* `SERVICEBUS_QUEUE_NAME` - name of your input queue
   
   OR
   
-* `INPUT_TOPIC_NAME`, `INPUT_SUBSCRIPTION_NAME` - names of your topic and subscription. Specify either queue name or topic/subscription names, not both.
+* `SERVICEBUS_TOPIC_NAME`, `SERVICEBUS_SUBSCRIPTION_NAME` - names of your topic and subscription. Specify either queue name or topic/subscription names, not both.
 * `OUTPUT_TABLE_NAME` - name of your Delta Lake table, e.g. `default.my-table`.
 
 * (optional) `JSONPATH_QUERY` - a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) expression to be applied to each message. Use it if your messages (either JSON or XML) do not match your table's schema.
