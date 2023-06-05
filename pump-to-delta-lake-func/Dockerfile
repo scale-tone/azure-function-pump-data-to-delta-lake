@@ -13,6 +13,9 @@ RUN pip install -r /requirements.txt
 
 COPY . /home/site/wwwroot
 
+# Otherwise DataBricks Connect expects an exact match between client and cluster versions
+ENV DEBUG_IGNORE_VERSION_MISMATCH=1
+
 # Need to override the startup script, to copy the correct function.json based on whether a queue or a topic is chosen as input
 COPY startup.sh /startup.sh
 RUN chmod +x /startup.sh
