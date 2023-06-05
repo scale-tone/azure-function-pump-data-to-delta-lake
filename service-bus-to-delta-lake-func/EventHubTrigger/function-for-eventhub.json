@@ -6,7 +6,7 @@
       "name": "events",
       "direction": "in",
       "dataType": "string",
-      "eventHubName": "%INPUT_EVENTHUB_NAME%",
+      "eventHubName": "%EVENTHUB_NAME%",
       "connection": "EVENTHUB_CONN_STRING",
       "cardinality": "many",
       "consumerGroup": "$Default"

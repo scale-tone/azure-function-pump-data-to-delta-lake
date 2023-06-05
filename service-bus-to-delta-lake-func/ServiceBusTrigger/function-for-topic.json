@@ -7,8 +7,8 @@
       "direction": "in",
       "dataType": "string",
       "cardinality": "many",
-      "topicName": "%INPUT_TOPIC_NAME%",
-      "subscriptionName": "%INPUT_SUBSCRIPTION_NAME%",
+      "topicName": "%SERVICEBUS_TOPIC_NAME%",
+      "subscriptionName": "%SERVICEBUS_SUBSCRIPTION_NAME%",
       "connection": "SERVICEBUS_CONN_STRING"
     }
   ]

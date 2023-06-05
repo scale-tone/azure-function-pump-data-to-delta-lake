@@ -3,12 +3,12 @@
   "bindings": [
     {
       "name": "events",
-      "type": "serviceBusTrigger",
+      "type": "queueTrigger",
       "direction": "in",
       "dataType": "string",
       "cardinality": "many",
-      "queueName": "%SERVICEBUS_QUEUE_NAME%",
-      "connection": "SERVICEBUS_CONN_STRING"
+      "queueName": "SERVICEBUS_QUEUE_NAME",
+      "connection": "STORAGE_CONN_STRING"
     }
   ]
 }
