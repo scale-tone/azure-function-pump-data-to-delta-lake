@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '6b6c35e2-54aa-4ba5-bb37-44fd563c1a92'
   imageRepository: 'servicebustodeltalakefunc'
   containerRegistry: 'tinocontainerregistry2.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/service-bus-to-delta-lake-func/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/pump-to-delta-lake-func/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
