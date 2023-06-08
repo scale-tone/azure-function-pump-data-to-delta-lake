@@ -2,11 +2,9 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "events",
+      "name": "event",
       "type": "queueTrigger",
       "direction": "in",
-      "dataType": "string",
-      "cardinality": "many",
       "queueName": "%STORAGE_QUEUE_NAME%",
       "connection": "STORAGE_CONN_STRING"
     }
