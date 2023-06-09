@@ -40,9 +40,8 @@ def main(event: func.QueueMessage) -> None:
 
         try:
 
-            fcntl.flock(filePath, fcntl.LOCK_EX)
-
             with open(filePath) as f:
+                fcntl.flock(f, fcntl.LOCK_EX)
                 convert_and_add_message(f.read(), result)
 
         except OSError:
