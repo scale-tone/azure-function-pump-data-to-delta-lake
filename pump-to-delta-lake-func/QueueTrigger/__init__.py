@@ -11,8 +11,7 @@ batch_size = 100
 max_wait_count = 60
 
 bufDir = os.path.join(tempfile.gettempdir(), "pump-to-delta-lake-func-buf")
-os.mkdir(bufDir)
-
+os.makedirs(bufDir, exist_ok=True)
 
 def main(event: func.QueueMessage) -> None:
 
