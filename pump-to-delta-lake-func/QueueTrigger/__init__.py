@@ -58,7 +58,4 @@ def main(event: func.QueueMessage) -> None:
     logging.warning(f">> {len(result)} events successfully sent")
 
     for f in allFiles:
-        try:
-            os.remove(os.path.join(bufDir, f))
-        except OSError:
-            pass
+        os.remove(os.path.join(bufDir, f))
