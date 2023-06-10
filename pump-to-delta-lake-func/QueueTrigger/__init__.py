@@ -43,6 +43,8 @@ def main(event: func.QueueMessage) -> None:
 
         with open(os.path.join(bufDir, "lock.lock"), "x"):
 
+            allFiles = [f for f in os.listdir(bufDir) if os.path.isfile(os.path.join(bufDir, f))]
+
             for f in allFiles:
                 fileName = os.path.join(bufDir, f)
 
