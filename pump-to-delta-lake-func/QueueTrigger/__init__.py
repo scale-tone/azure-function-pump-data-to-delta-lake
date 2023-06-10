@@ -39,23 +39,27 @@ def main(event: func.QueueMessage) -> None:
 
     result = []
 
-    for f in allFiles:
-        fileName = os.path.join(bufDir, f)
+    try:
 
-        try:
+        with open(os.path.join(bufDir, "lock.lock"), "x"):
 
-            with open(fileName) as f:
-                fcntl.flock(f, fcntl.LOCK_EX)
-                convert_and_add_message(f.read(), result)
+            for f in allFiles:
+                fileName = os.path.join(bufDir, f)
 
-        except OSError:
-            pass
+                with open(fileName) as f:
+                    convert_and_add_message(f.read(), result)
 
-    logging.warning(f">> sending {len(result)} events...")
+            logging.warning(f">> sending {len(result)} events...")
 
-    send_to_delta_table(result)
+            send_to_delta_table(result)
 
-    logging.warning(f">> {len(result)} events successfully sent")
+            logging.warning(f">> {len(result)} events successfully sent")
 
-    for f in allFiles:
-        os.remove(os.path.join(bufDir, f))
+            for f in allFiles:
+                os.remove(os.path.join(bufDir, f))
+
+        os.remove(os.path.join(bufDir, "lock.lock"))
+
+    except FileExistsError:
+        logging.warning(">>> failed to get lock")
+        pass
