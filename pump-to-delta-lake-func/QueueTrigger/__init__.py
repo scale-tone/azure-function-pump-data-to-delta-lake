@@ -4,6 +4,7 @@ import os
 import tempfile
 import shutil
 import time
+import math
 
 import azure.functions as func
 from helpers import convert_and_add_message, send_to_delta_table
@@ -22,7 +23,9 @@ MAX_WAIT_IN_SECONDS = 200
 def main(event: func.QueueMessage) -> None:
 
     # Organizing a 1-second-long bucket folder
-    str_time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    now = datetime.datetime.now()
+    str_time = now.strftime("%Y-%m-%d-%H-%M-") + str(math.floor(now.second / 10))
+
     batch_dir = os.path.join(buf_dir, str_time)
     os.makedirs(batch_dir, exist_ok=True)
 
@@ -52,10 +55,12 @@ def main(event: func.QueueMessage) -> None:
                     with open(os.path.join(batch_dir, event_file_name)) as f:
                         convert_and_add_message(f.read(), result)
 
-                logging.warning(f">> sending {len(result)} events")
+                logging.warning(f">> sending {len(result)} events ({event.id})")
 
                 # Sending batch to Delta Table
                 send_to_delta_table(result)
+
+                logging.warning(f">> successfully sent {len(result)} events ({event.id})")
 
                 # Flushing bucket folder, but only if and when the entire batch is successfully sent
                 shutil.rmtree(batch_dir, ignore_errors=True)
