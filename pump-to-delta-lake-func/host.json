@@ -15,11 +15,5 @@
   "concurrency": {
     "dynamicConcurrencyEnabled": true,
     "snapshotPersistenceEnabled": true
-  },
-
-  "extensions": {
-    "queues": {
-        "batchSize": 1
-    }
-  }  
+  }
 }
