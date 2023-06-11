@@ -17,9 +17,7 @@
     "snapshotPersistenceEnabled": true
   },
 
-  "extensions": {
-    "queues": {
-        "batchSize": 4
-    }
-  }  
+  "healthMonitor": {
+      "enabled": false
+  }
 }
