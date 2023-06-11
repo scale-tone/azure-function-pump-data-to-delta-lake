@@ -52,6 +52,8 @@ def main(event: func.QueueMessage) -> None:
                     with open(os.path.join(batch_dir, event_file_name)) as f:
                         convert_and_add_message(f.read(), result)
 
+                logging.warning(f">> sending {len(result)} events")
+
                 # Sending batch to Delta Table
                 send_to_delta_table(result)
 
