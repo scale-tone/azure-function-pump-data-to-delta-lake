@@ -19,7 +19,7 @@
 
   "extensions": {
     "queues": {
-        "batchSize": 32
+        "batchSize": 4
     }
   }  
 }
