@@ -35,8 +35,6 @@ def main(event: func.QueueMessage) -> None:
 
         cur_event_file_path = os.path.join(batch_dir, event.id + '.txt')
 
-        logging.warning(f">> saving {event.id} to {cur_event_file_path}")
-
         with open(cur_event_file_path, 'w') as f:
             f.write(event.get_body().decode('utf-8'))
 
@@ -76,15 +74,11 @@ def main(event: func.QueueMessage) -> None:
         except (FileNotFoundError, FileExistsError):
             pass
 
-        logging.warning(f">> waiting for {event.id} to be sent")
-
         # Failed to obtain the lock, so just waiting till our file gets removed (which indicates that it was successfully sent by another handler)
         i = 0
         while os.path.isfile(cur_event_file_path) and i < MAX_WAIT_IN_SECONDS:
             time.sleep(1)
             i = i + 1
-
-        logging.warning(f">> {event.id} sent successfully")
 
         if i == MAX_WAIT_IN_SECONDS:
 
