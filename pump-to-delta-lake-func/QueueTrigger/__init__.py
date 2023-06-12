@@ -9,6 +9,9 @@ import math
 import azure.functions as func
 from helpers import convert_and_add_message, send_to_delta_table
 
+# Will apply this jsonpath query, if specified
+json_path_query = os.getenv("STORAGE_JSONPATH_QUERY")
+
 buf_dir = os.path.join(tempfile.gettempdir(), "pump-to-delta-lake-func-buf")
 os.makedirs(buf_dir, exist_ok=True)
 
@@ -56,7 +59,7 @@ def main(event: func.QueueMessage) -> None:
                 for event_file_name in event_files:
 
                     with open(os.path.join(batch_dir, event_file_name)) as f:
-                        convert_and_add_message(f.read(), result)
+                        convert_and_add_message(f.read(), json_path_query, result)
 
                 # Sending batch to Delta Table
                 send_to_delta_table(result)

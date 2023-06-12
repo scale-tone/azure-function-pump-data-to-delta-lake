@@ -23,10 +23,10 @@ spark = SparkSession.builder.getOrCreate()
 
 def send_to_delta_table(msgs):
 
-    dFrame = spark.createDataFrame(msgs)
+    frame = spark.createDataFrame(msgs)
 
     # Appending records to OUTPUT_TABLE_NAME
-    dFrame.write.format("delta").mode("append").saveAsTable(os.environ["OUTPUT_TABLE_NAME"])
+    frame.write.format("delta").mode("append").saveAsTable(os.environ["OUTPUT_TABLE_NAME"])
 
 
 def apply_jsonpath(msg, json_path):
@@ -44,27 +44,23 @@ def apply_jsonpath(msg, json_path):
 
         return record
 
-
-# Will apply this jsonpath query, if specified
-jsonPathQuery = os.getenv("JSONPATH_QUERY")
-
-def convert_and_add_message(msgString, convertedMsgBatch):
+def convert_and_add_message(msg_string, json_path_query, output_container):
 
     # supporting both XML and JSON
-    if msgString.startswith("<"):
-        jsonObjects = xmltodict.parse(msgString, attr_prefix="")
-        jsonObjects = list(jsonObjects.values())[0]
+    if msg_string.startswith("<"):
+        json_objects = xmltodict.parse(msg_string, attr_prefix="")
+        json_objects = list(json_objects.values())[0]
     else:
-        jsonObjects = json.loads(msgString)
+        json_objects = json.loads(msg_string)
 
     # converting to array, if it is not yet
-    if type(jsonObjects) != list:
-        jsonObjects = [jsonObjects]
+    if type(json_objects) != list:
+        json_objects = [json_objects]
 
-    for jsonObject in jsonObjects:
+    for json_object in json_objects:
 
         # Applying jsonpath query, if specified
-        if jsonPathQuery != None:
-            jsonObject = apply_jsonpath(jsonObject, jsonPathQuery)
+        if json_path_query != None:
+            json_object = apply_jsonpath(json_object, json_path_query)
 
-        convertedMsgBatch.append(jsonObject)
+        output_container.append(json_object)
