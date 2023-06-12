@@ -18,7 +18,7 @@ MAX_WAIT_IN_SECONDS = 300
 
 # Storage Queue trigger does not support batching. So we'll need to handcraft it ourselves, using local temp folder as a buffer.
 # The strategy below is as follows:
-#   We store events in bucket folders, a separate folder _per every PUSH_INTERVAL_IN_SECONDS_.
+#   We store events in bucket folders, a separate folder per every PUSH_INTERVAL_IN_SECONDS.
 #   Then one of the handlers obtains an exclusive lock over that folder (by exclusively creating a dummy file)
 #   and pushes all files from it to destination. Other handlers just wait until it happens.
 #   If it doesn't happen within MAX_WAIT_IN_SECONDS, the handlers throw, causing their messages to be retried.
@@ -58,12 +58,8 @@ def main(event: func.QueueMessage) -> None:
                     with open(os.path.join(batch_dir, event_file_name)) as f:
                         convert_and_add_message(f.read(), result)
 
-                logging.warning(f">> sending {len(result)} events ({event.id})")
-
                 # Sending batch to Delta Table
                 send_to_delta_table(result)
-
-                logging.warning(f">> successfully sent {len(result)} events ({event.id})")
 
                 # Flushing bucket folder, but only if and when the entire batch is successfully sent
                 shutil.rmtree(batch_dir, ignore_errors=True)
