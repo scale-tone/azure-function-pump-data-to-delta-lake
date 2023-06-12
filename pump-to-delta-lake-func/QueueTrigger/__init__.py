@@ -12,7 +12,7 @@ from helpers import convert_and_add_message, send_to_delta_table
 buf_dir = os.path.join(tempfile.gettempdir(), "pump-to-delta-lake-func-buf")
 os.makedirs(buf_dir, exist_ok=True)
 
-MAX_WAIT_IN_SECONDS = 25
+MAX_WAIT_IN_SECONDS = 300
 
 # Storage Queue trigger does not support batching. So we'll need to handcraft it ourselves, using local temp folder as a buffer.
 # The strategy below is as follows:

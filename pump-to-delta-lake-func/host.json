@@ -17,6 +17,8 @@
     "snapshotPersistenceEnabled": true
   },
 
+  "functionTimeout": "00:05:00",
+
   "healthMonitor": {
       "enabled": false
   }
