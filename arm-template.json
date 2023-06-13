@@ -4,7 +4,7 @@
     "parameters": {
         "deploymentName": {
             "type": "string",
-            "defaultValue": "[concat('sftpw', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('fptdl', uniqueString(resourceGroup().id))]",
             "metadata": {
                 "description": "[General] A unique random base name for this service"
             }
@@ -44,7 +44,7 @@
         },
 
         "SERVICEBUS_CONN_STRING": {
-            "type": "string",
+            "type": "securestring",
             "defaultValue": "",
             "metadata": {
                 "description": "[Service Bus] Connection string to your Service Bus namespace (if you're using Service Bus to stream your data)"
@@ -80,7 +80,7 @@
         },
 
         "EVENTHUB_CONN_STRING": {
-            "type": "string",
+            "type": "securestring",
             "defaultValue": "",
             "metadata": {
                 "description": "[Event Hubs] Connection string to your Event Hubs namespace (if you're using Event Hubs to stream your data)"
@@ -102,7 +102,7 @@
         },
 
         "STORAGE_CONN_STRING": {
-            "type": "string",
+            "type": "securestring",
             "defaultValue": "",
             "metadata": {
                 "description": "[Azure Storage] Connection string to your Azure Storage (if you're using Storage Queues to stream your data)"
@@ -155,9 +155,12 @@
                 "size": "EP2",
                 "family": "EP"
             },
-            "kind": "elastic",
+            "kind": "elastic,linux",
+
+
             "properties": {
-                "name": "[variables('hostingPlanName')]"
+                "name": "[variables('hostingPlanName')]",
+                "reserved": true
             }
         },
 
@@ -171,17 +174,14 @@
                 "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
-            "resources": [
-
-
-
-            ],
             "properties": {
+                "enabled": true,
+                "reserved": true,
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 
                 "siteConfig": {
 
-                    "linuxFxVersion": "[concat('DOCKER|', parameters('containerImage'))]",
+                    "linuxFxVersion": "[concat('DOCKER|', variables('containerImage')]",
 
                     "appSettings": [
 
@@ -221,8 +221,8 @@
                         },
 
                         {
-                            "name": "SERVICE_BUS_CONN_STRING",
-                            "value": "[parameters('SERVICE_BUS_CONN_STRING')]"
+                            "name": "SERVICEBUS_CONN_STRING",
+                            "value": "[parameters('SERVICEBUS_CONN_STRING')]"
                         },
                         {
                             "name": "SERVICEBUS_QUEUE_NAME",
@@ -268,6 +268,20 @@
                         }
                     ]
                 }
+            }
+        },
+
+
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(variables('functionAppName'), '/web')]",
+            "location": "North Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+            ],
+            "properties": {
+                "linuxFxVersion": "[concat('DOCKER|', variables('containerImage')]"
             }
         }
     ]
