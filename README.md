@@ -25,7 +25,7 @@ The following settings need to be configured in your Function App instance.
 * `SERVICEBUS_TOPIC_NAME`, `SERVICEBUS_SUBSCRIPTION_NAME` - names of your topic and subscription. Specify either queue name or topic/subscription names, not both.
 * `OUTPUT_TABLE_NAME` - name of your Delta Lake table, e.g. `default.my-table`.
 
-* (optional) `JSONPATH_QUERY` - a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) expression to be applied to each message. Use it if your messages (either JSON or XML) do not match your table's schema.
+* (optional) `SERVICEBUS_JSONPATH_QUERY` - a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) expression to be applied to each message. Use it if your messages (either JSON or XML) do not match your table's schema.
 
 # How to deploy to Azure
 
