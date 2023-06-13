@@ -29,4 +29,8 @@ The following settings need to be configured in your Function App instance.
 
 # How to deploy to Azure
 
-[Exactly as described here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=in-process%2Cbash%2Cazure-cli&pivots=programming-language-python#create-and-configure-a-function-app-on-azure-with-the-image).
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fscale-tone%2Fazure-function-pump-data-to-delta-lake%2Fmain%2Farm-template.json)
+
+The above button will deploy [this container](https://hub.docker.com/r/scaletone/azurefunctionpumpdatatodeltalake) to a newly created Azure Functions instance (Premium plan).
+
+Alternatively you can fork this repo and deploy it [exactly as described here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=in-process%2Cbash%2Cazure-cli&pivots=programming-language-python#create-and-configure-a-function-app-on-azure-with-the-image).
