@@ -181,7 +181,7 @@
                 
                 "siteConfig": {
 
-                    "linuxFxVersion": "[concat('DOCKER|', variables('containerImage')]",
+                    "linuxFxVersion": "[concat('DOCKER|', variables('containerImage'))]",
 
                     "appSettings": [
 
@@ -281,7 +281,7 @@
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
             "properties": {
-                "linuxFxVersion": "[concat('DOCKER|', variables('containerImage')]"
+                "linuxFxVersion": "[concat('DOCKER|', variables('containerImage'))]"
             }
         }
     ]
