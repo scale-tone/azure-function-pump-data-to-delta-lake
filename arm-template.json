@@ -1,0 +1,274 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentName": {
+            "type": "string",
+            "defaultValue": "[concat('sftpw', uniqueString(resourceGroup().id))]",
+            "metadata": {
+                "description": "[General] A unique random base name for this service"
+            }
+        },
+
+        "containerImage": {
+            "type": "string",
+            "defaultValue": "scaletone/azurefunctionpumpdatatodeltalake:1.0",
+            "metadata": {
+                "description": "[General] Docker container image to use"
+            }
+        },
+
+        "DATABRICKS_ADDRESS": {
+            "type": "string",
+            "metadata": {
+                "description": "[Output] Databricks instance URL, e.g. 'https://adb-123456789012345.12.azuredatabricks.net'"
+            }
+        },
+        "DATABRICKS_CLUSTER_ID": {
+            "type": "string",
+            "metadata": {
+                "description": "[Output] Databricks cluster ID, e.g. '0123-123456-abcdefgh'"
+            }
+        },
+        "DATABRICKS_ORG_ID": {
+            "type": "string",
+            "metadata": {
+                "description": "[Output] Databricks org ID, e.g. '123456789012345'. Typically you can find it in instance URL (numeric value between first dash and first dot)."
+            }
+        },
+        "DATABRICKS_API_TOKEN": {
+            "type": "securestring",
+            "metadata": {
+                "description": "[Output] Databricks API token, e.g. 'dapi12345abc6789def-12'"
+            }
+        },
+
+        "SERVICEBUS_CONN_STRING": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Service Bus] Connection string to your Service Bus namespace (if you're using Service Bus to stream your data)"
+            }
+        },
+        "SERVICEBUS_QUEUE_NAME": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Service Bus] Queue name to take messages from (if your messages come from a queue)"
+            }
+        },
+        "SERVICEBUS_TOPIC_NAME": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Service Bus] Topic name to take messages from (if your messages come from a topic)"
+            }
+        },
+        "SERVICEBUS_SUBSCRIPTION_NAME": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Service Bus] Topic subscription name to take messages from (if your messages come from a topic)"
+            }
+        },
+        "SERVICEBUS_JSONPATH_QUERY": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Service Bus] [Optional] JSONPath expression to be applied to each message. Specify it if your messages (either JSON or XML) do not match your table's schema and you want them to be converted on-the-fly."
+            }
+        },
+
+        "EVENTHUB_CONN_STRING": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Event Hubs] Connection string to your Event Hubs namespace (if you're using Event Hubs to stream your data)"
+            }
+        },
+        "EVENTHUB_NAME": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Event Hubs] Event Hub name to take messages from"
+            }
+        },
+        "EVENTHUB_JSONPATH_QUERY": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Event Hubs] [Optional] JSONPath expression to be applied to each message. Specify it if your messages (either JSON or XML) do not match your table's schema and you want them to be converted on-the-fly."
+            }
+        },
+
+        "STORAGE_CONN_STRING": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Azure Storage] Connection string to your Azure Storage (if you're using Storage Queues to stream your data)"
+            }
+        },
+        "STORAGE_QUEUE_NAME": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Azure Storage] Storage Queue name to take messages from"
+            }
+        },
+        "STORAGE_JSONPATH_QUERY": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "[Azure Storage] [Optional] JSONPath expression to be applied to each message. Specify it if your messages (either JSON or XML) do not match your table's schema and you want them to be converted on-the-fly."
+            }
+        }       
+        
+    },
+    "variables": {
+        "storageAccountName": "[concat(parameters('deploymentName'), 'st')]",
+        "hostingPlanName": "[concat(parameters('deploymentName'), '-plan')]",
+        "functionAppName": "[concat(parameters('deploymentName'), '-function')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2"
+            }
+        },
+
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2022-09-01",
+            "name": "[variables('hostingPlanName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "EP2",
+                "tier": "ElasticPremium",
+                "size": "EP2",
+                "family": "EP"
+            },
+            "kind": "elastic",
+            "properties": {
+                "name": "[variables('hostingPlanName')]"
+            }
+        },
+
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "name": "[variables('functionAppName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "functionapp,linux,container",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            ],
+            "resources": [
+
+
+
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                
+                "siteConfig": {
+
+                    "linuxFxVersion": "[concat('DOCKER|', parameters('containerImage'))]",
+
+                    "appSettings": [
+
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[variables('functionAppName')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+
+
+                        {
+                            "name": "DATABRICKS_ADDRESS",
+                            "value": "[parameters('DATABRICKS_ADDRESS')]"
+                        },
+                        {
+                            "name": "DATABRICKS_CLUSTER_ID",
+                            "value": "[parameters('DATABRICKS_CLUSTER_ID')]"
+                        },
+                        {
+                            "name": "DATABRICKS_ORG_ID",
+                            "value": "[parameters('DATABRICKS_ORG_ID')]"
+                        },
+                        {
+                            "name": "DATABRICKS_API_TOKEN",
+                            "value": "[parameters('DATABRICKS_API_TOKEN')]"
+                        },
+
+                        {
+                            "name": "SERVICE_BUS_CONN_STRING",
+                            "value": "[parameters('SERVICE_BUS_CONN_STRING')]"
+                        },
+                        {
+                            "name": "SERVICEBUS_QUEUE_NAME",
+                            "value": "[parameters('SERVICEBUS_QUEUE_NAME')]"
+                        },
+                        {
+                            "name": "SERVICEBUS_TOPIC_NAME",
+                            "value": "[parameters('SERVICEBUS_TOPIC_NAME')]"
+                        },
+                        {
+                            "name": "SERVICEBUS_SUBSCRIPTION_NAME",
+                            "value": "[parameters('SERVICEBUS_SUBSCRIPTION_NAME')]"
+                        },
+                        {
+                            "name": "SERVICEBUS_JSONPATH_QUERY",
+                            "value": "[parameters('SERVICEBUS_JSONPATH_QUERY')]"
+                        },
+
+                        {
+                            "name": "EVENTHUB_CONN_STRING",
+                            "value": "[parameters('EVENTHUB_CONN_STRING')]"
+                        },
+                        {
+                            "name": "EVENTHUB_NAME",
+                            "value": "[parameters('EVENTHUB_NAME')]"
+                        },
+                        {
+                            "name": "EVENTHUB_JSONPATH_QUERY",
+                            "value": "[parameters('EVENTHUB_JSONPATH_QUERY')]"
+                        },
+
+                        {
+                            "name": "STORAGE_CONN_STRING",
+                            "value": "[parameters('STORAGE_CONN_STRING')]"
+                        },
+                        {
+                            "name": "STORAGE_QUEUE_NAME",
+                            "value": "[parameters('STORAGE_QUEUE_NAME')]"
+                        },
+                        {
+                            "name": "STORAGE_JSONPATH_QUERY",
+                            "value": "[parameters('STORAGE_JSONPATH_QUERY')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
