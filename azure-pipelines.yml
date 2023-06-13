@@ -10,11 +10,10 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '6b6c35e2-54aa-4ba5-bb37-44fd563c1a92'
-  imageRepository: 'servicebustodeltalakefunc'
-  containerRegistry: 'tinocontainerregistry2.azurecr.io'
+  dockerRegistryServiceConnection: '41c35ef6-e9c6-423f-9297-dfa500dfe385'
+  imageRepository: 'azurefunctionpumpdatatodeltalake'
   dockerfilePath: '$(Build.SourcesDirectory)/pump-to-delta-lake-func/Dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: '1.0'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
