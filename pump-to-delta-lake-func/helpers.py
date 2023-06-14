@@ -44,7 +44,7 @@ def apply_jsonpath(msg, json_path):
 
         return record
 
-def convert_and_add_message(msg_string, json_path_query, output_container):
+def convert_and_add_message(msg_string, json_path, output_container):
 
     # supporting both XML and JSON
     if msg_string.startswith("<"):
@@ -60,7 +60,7 @@ def convert_and_add_message(msg_string, json_path_query, output_container):
     for json_object in json_objects:
 
         # Applying jsonpath query, if specified
-        if json_path_query != None:
-            json_object = apply_jsonpath(json_object, json_path_query)
+        if json_path:
+            json_object = apply_jsonpath(json_object, json_path)
 
         output_container.append(json_object)
