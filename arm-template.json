@@ -43,7 +43,7 @@
             }
         },
         "OUTPUT_TABLE_NAME": {
-            "type": "securestring",
+            "type": "string",
             "metadata": {
                 "description": "[Output] Name of your Delta Lake table, e.g. 'default.my-table'"
             }
