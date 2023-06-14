@@ -155,7 +155,7 @@
                 "size": "EP2",
                 "family": "EP"
             },
-            "kind": "elastic,linux",
+            "kind": "linux,elastic",
 
 
             "properties": {
@@ -177,6 +177,9 @@
             "properties": {
                 "enabled": true,
                 "reserved": true,
+                "scmType": "None",
+
+
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
                 
                 "siteConfig": {
@@ -198,8 +201,24 @@
                             "value": "[variables('functionAppName')]"
                         },
                         {
+                            "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+                            "value": "false"
+                        },
+                        {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
-                            "value": "dotnet"
+                            "value": "python"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "DOCKER_REGISTRY_SERVER_URL",
+                            "value": "https://index.docker.io/v1"
+                        },
+                        {
+                            "name": "DOCKER_CUSTOM_IMAGE_NAME",
+                            "value": "[concat('DOCKER|', parameters('containerImage'))]"
                         },
 
 
