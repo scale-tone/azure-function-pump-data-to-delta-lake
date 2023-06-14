@@ -52,3 +52,19 @@ The following settings need to be configured in your Function App instance.
 The above button will deploy [this container](https://hub.docker.com/r/scaletone/azurefunctionpumpdatatodeltalake) to a newly created Azure Functions instance (Premium plan).
 
 Alternatively you can fork this repo and deploy it [exactly as described here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=in-process%2Cbash%2Cazure-cli&pivots=programming-language-python#create-and-configure-a-function-app-on-azure-with-the-image).
+
+# Performance
+
+Test setup: 
+* Function App instance in Premium tier locked to 2 EP2 instances (2 vCPU, 7GB memory each).
+* 3-node cluster (4 cores, 14 GB memory each).
+* Service Bus queue with Standard pricing tier, not partitioned.
+* Event Hub with 2 partitions, Standard pricing tier.
+* Storage queue in a General Purpose V2 Storage account.
+* 30000 messages of ~100 bytes each.
+
+The following results were registered:
+
+* **Via a Service Bus queue**:  **215** messages per second.
+* **Via an Event Hub**:  **230** messages per second.
+* **Via a Storage Queue**:  **75** messages per second.
