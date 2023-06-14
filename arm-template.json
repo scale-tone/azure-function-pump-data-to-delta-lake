@@ -42,6 +42,12 @@
                 "description": "[Output] Databricks API token, e.g. 'dapi12345abc6789def-12'"
             }
         },
+        "OUTPUT_TABLE_NAME": {
+            "type": "securestring",
+            "metadata": {
+                "description": "[Output] Name of your Delta Lake table, e.g. 'default.my-table'"
+            }
+        },
 
         "SERVICEBUS_CONN_STRING": {
             "type": "securestring",
@@ -237,6 +243,10 @@
                         {
                             "name": "DATABRICKS_API_TOKEN",
                             "value": "[parameters('DATABRICKS_API_TOKEN')]"
+                        },
+                        {
+                            "name": "OUTPUT_TABLE_NAME",
+                            "value": "[parameters('OUTPUT_TABLE_NAME')]"
                         },
 
                         {
