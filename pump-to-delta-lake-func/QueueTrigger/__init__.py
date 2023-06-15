@@ -27,7 +27,7 @@ MAX_WAIT_IN_SECONDS = 300
 #   If it doesn't happen within MAX_WAIT_IN_SECONDS, the handlers throw, causing their messages to be retried.
 def main(event: func.QueueMessage) -> None:
 
-    # Organizing a 1-second-long bucket folder
+    # Organizing a bucket folder
     now = datetime.datetime.now()
     str_time = now.strftime("%Y-%m-%d-%H-%M-") + str(math.floor(now.second / PUSH_INTERVAL_IN_SECONDS))
 
