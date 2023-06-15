@@ -68,3 +68,5 @@ The following results were registered:
 * **Via a Service Bus queue**:  **215** messages per second.
 * **Via an Event Hub**:  **230** messages per second.
 * **Via a Storage Queue**:  **75** messages per second.
+
+There is a strong belief that these numbers can be significantly improved by playing with [batch size](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-hubs?tabs=in-process%2Cextensionv5&pivots=programming-language-csharp#hostjson-settings) settings (which [can be adjusted via config settings](https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json#override-hostjson-values))
